@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Calculator</title>
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+</head>
+<body>
+
+	<audio id="key" src="audio/key.mp3"></audio>
+	<audio id="totalkey" src="audio/totalkey.mp3"></audio>
+	<form name="cal">
+		<div id="wrapper">
+		<div class="child"><input type="text" disabled name="input"></div>
+		<div class="child"><button type="button" name="ac" value="ac" onclick="calc(this.value);">AC</button> </div>
+<!-- 		<div class="child"><button type="button" name="plusminus" >+/-</button> </div>
+ -->		<div class="child"><button type="button" name="avg" value="avg" onclick="calc(this.value);" >AVG</button> </div>
+		<div class="child last"><button type="button" name="div" value="/" onclick="calc(this.value);" >&div;</button> </div>
+		<div class="child"><button type="button" name="seven" onclick="calc(this.value);" value="7">7</button></div>
+		<div class="child"><button type="button" name="eight" value="8" onclick="calc(this.value);">8</button></div>
+		<div class="child"><button type="button" name="nine" value="9" onclick="calc(this.value);">9</button></div>
+		<div class="child last"><button type="button" name="mul" value="*" onclick="calc(this.value);">&times;</button></div>
+		<div class="child"><button type="button" name="four" value="4" onclick="calc(this.value);">4</button></div>
+		<div class="child"><button type="button" name="five" value="5" onclick="calc(this.value);">5</button></div>
+		<div class="child"><button type="button" name="six" value="6" onclick="calc(this.value);">6</button></div>
+		<div class="child last"><button type="button" name="minus" value="-" onclick="calc(this.value);">&minus;</button></div>
+		<div class="child"><button type="button" name="one" value="1" onclick="calc(this.value);">1</button></div>
+		<div class="child"><button type="button" name="two" value="2" onclick="calc(this.value);">2</button></div>
+		<div class="child"><button  type="button" name="three" value="3" onclick="calc(this.value);">3</button></div>
+		<div class="child last"><button type="button" name="plus" value="+" onclick="calc(this.value);">&plus;</button></div>
+		<div class="child"><button type="button" name="zero" value="0" onclick="calc(this.value);">0</button></div>
+		<div class="child"><button type="button" name="point" value="." onclick="calc(this.value);">.</button></div>
+		<div class="child last"><button type="button" value="=" name="equals" onclick="calc(this.value);">&equals;</button></div>
+		</div>
+
+ 
+<div id="info"></div>
+	</form>
+</body>
+<script type="text/javascript">
+	const clear = () =>{
+		cal.input.value ='';
+	}
+	const avg = () => {
+		//convert the string into array
+		var array = cal.input.value.split('+');
+		//conver the string array into a number array
+		array = array.map(Number);
+		//reduce takes every number and adds it to the accumulator;
+		var total = array.reduce((accumulator, currentValue ) => accumulator + currentValue);
+		//get the avg by dividing the total by the length of the array
+		cal.input.value =total/array.length;
+	}
+	const calc = (value)=>{
+		if(value=='=' || value=='Enter'){
+			var audio = document.getElementById("totalkey");
+			cal.input.value = eval(cal.input.value);
+		}else if(value=='ac'){
+			var audio = document.getElementById("key");
+			clear();
+		}else if(value=='avg'){
+			var audio = document.getElementById("totalkey");
+			avg();
+		}else{
+			var audio = document.getElementById("key");
+			cal.input.value +=value;
+		}
+		audio.play();
+	 }
+	 window.onload = function(){
+	  	document.onkeyup = getKey;
+	 }
+	 function getKey(event) {
+	 	//get the event. En este caso, onkeyup.
+		var e = window.event || event;
+		 
+		var key = e.key;
+
+		console.log(key);
+		//regular expresion that only accepts numbers
+		if (/^\d+$/.test(key) || key =='Enter' || key =='+' || key =='-' || key =='*' || key =='/' || key =='.'){
+			calc(key);
+		}else if (key == "Escape") {
+			calc('ac');
+		}else if (key == "Tab") {
+			calc('avg')
+		}
+	}
+</script>
+</html>
